@@ -1,26 +1,43 @@
-$(document).ready(function() {
 
-  var x=0;
+function generate_dropdown_box(){
+  return $('form div').first().html();
+}
+
+window.my_total_cost = 0
+window.total_cost = 0
+
+$(document).ready(function() {
+  $('input[type=submit]').attr('disabled', 'disabled');
+
+  var totalcost=0;
   $('form').on('change', 'select', function() {
     $('form div').first().html(); // all the <optgroup> and <options> from the first <select> tag
-  $('form').append($('form div').first().html());
+    $('#drinklist').append(generate_dropdown_box());
 
-  x+=1;
-
-  $('#drinks').text(x);
-  console.log(x)
+      totalcost += 1;
+      $('#drinks').text(totalcost);
+      // console.log(x)
 
   var value = 0;
   $('select').each(function(){
     var price = $(this).find(":selected").attr('data-price');
     if ($.isNumeric(price)){
+    window.total_cost += (price/100);
+    }
 
-    value += (price/100);
-  }
+    window.my_total_cost = $('#cost').text("$" + window.total_cost.toFixed(2));
+          $('input[type=submit]').removeAttr("disabled");
 
-    $('#cost').text("$" + value.toFixed(2));
-    
-    console.log(value);
+    $('form').submit(function(event){
+      event.preventDefault();
+      $.post('/shop', 
+      {
+        the_cost: "window.my_total_cost",
+      },
+      function(data){
+        alert(data);
+      });
+    });
    });
   });
 });
