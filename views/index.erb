@@ -30,7 +30,7 @@
           <div id="drinklist">
             <!-- See this "drink[]" name? -->
             <!-- This is turned into an array of items -->
-            <select name="drink[]" width="300" style="width: 300px;">
+            <select name="drink[]">
               <option>Please select a drink</option>
               <optgroup label="Coffee">
                 <option data-price="200" value="house">House Coffee — $2.00</option>
@@ -56,11 +56,14 @@
             <dt># of Drinks</dt>
             <dd id="drinks">0</dd>
 
+            <dt>Taxes</dt>
+            <dd id="taxes">$1.00</dd>
+
             <dt>Cost</dt>
             <dd id="cost">$0.00</dd>
+            <br>
+            <input id="submitbutton" type="submit" value="Place Your Order">
           </dl>
-          <br>
-          <input id="submitbutton" type="submit" value="Place Your Order">
         </form>
       </div>
 

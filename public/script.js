@@ -1,9 +1,8 @@
 
 function generate_dropdown_box(){
-  return $('form div').first().html();
+  return $('form div select').first().html();
 }
 
-window.my_total_cost = 0
 window.total_cost = 0
 
 $(document).ready(function() {
@@ -12,35 +11,60 @@ $(document).ready(function() {
   var totalcost=0;
   $('form').on('change', 'select', function() {
     $('form div').first().html(); // all the <optgroup> and <options> from the first <select> tag
-    $('#drinklist').append(generate_dropdown_box());
+    $('#drinklist').append('<select>' + generate_dropdown_box() + '</select>');
 
-      totalcost += 1;
-      $('#drinks').text(totalcost);
+    totalcost += 1;
+    $('#drinks').text(totalcost);
       // console.log(x)
 
-  var value = 0;
-  $('select').each(function(){
-    var price = $(this).find(":selected").attr('data-price');
-    if ($.isNumeric(price)){
-    window.total_cost += (price/100);
-    }
+      
+      $('select').each(function(){
+        var price = $(this).find(":selected").attr('data-price');
+        if ($.isNumeric(price)){
+          window.total_cost += (price/100);
+        }
 
-    window.my_total_cost = $('#cost').text("$" + window.total_cost.toFixed(2));
-          $('input[type=submit]').removeAttr("disabled");
-
-    $('form').submit(function(event){
-      event.preventDefault();
-      $.post('/shop', 
-      {
-        the_cost: "window.my_total_cost",
-      },
-      function(data){
-        alert(data);
+        $('#cost').text("$" + window.total_cost.toFixed(2));
+        $('input[type=submit]').removeAttr("disabled");
       });
     });
-   });
+  
+  $('form').submit(function(event){
+     event.preventDefault();
+     $.ajax({
+      type: "post", url: "/shop",
+      success: function (data) {
+        $('form').text(data + "$" + total_cost.toFixed(2));
+      },
+    error: function (request, status, error) {
+      alert("There was an error when submitting your request");
+    }
+      });
   });
 });
+
+// var jqAjax = $.ajax({
+//    url:  'server URL',
+//    type: "GET/POST",
+//    dataType: "TYPE" , 
+//  });
+//   jqAjax.fail(function(jqXHR, textStatus, errorThrown){
+//     switch(textStatus)
+//     {
+//       case "404":
+//       x="404 Error";
+//       break;
+//       case "0":
+//       x="0 Error";
+//       break;
+//       case "500":
+//       x="500 Error";
+//       break;
+//       case "timeout":
+//       x="Page timeout";
+//       break;
+//     }
+//   });
 
  //for each select tag
  //grab the selected option
